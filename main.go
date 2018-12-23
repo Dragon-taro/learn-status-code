@@ -42,6 +42,12 @@ func handleRequestUser(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprint(w, body)
 		return
 	}
+
+	code := http.StatusPaymentRequired
+	body := createBody(code)
+	w.WriteHeader(code)
+	fmt.Fprint(w, body)
+	return
 }
 
 func main() {
