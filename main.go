@@ -17,9 +17,13 @@ func getStatusCode() int {
 	return codeArray[rand.Intn(len(codeArray))]
 }
 
+func createBody(code int) string {
+	return strconv.Itoa(code) + ": " + status.StatusText(code)
+}
+
 func handleStaus() (int, string) {
 	code := getStatusCode()
-	body := strconv.Itoa(code) + ": " + status.StatusText(code)
+	body := createBody(code)
 	return code, body
 }
 
@@ -32,8 +36,10 @@ func handleRequest(w http.ResponseWriter, req *http.Request) {
 
 func handleRequestUser(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "POST" {
-		status, _ := handleStaus()
-		w.WriteHeader(status)
+		code := http.StatusTooManyRequests
+		body := createBody(code)
+		w.WriteHeader(code)
+		fmt.Fprint(w, body)
 		return
 	}
 }
